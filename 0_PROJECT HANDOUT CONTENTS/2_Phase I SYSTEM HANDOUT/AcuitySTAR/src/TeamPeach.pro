@@ -3,6 +3,7 @@
 # Project created by QtCreator 2015-10-21T14:49:31
 #
 #-------------------------------------------------
+QT              += testlib
 
 QT              += core gui
 CONFIG          += c++11
@@ -30,7 +31,8 @@ HEADERS += \
     datamodel/GrantFundingTreeModel.h \
     datamodel/TeachingTreeModel.h \
     database/TestCSVReader.h \
-    gui/qcustomplot.h
+    gui/qcustomplot.h \
+    tests/TestQString.h
 
 
 SOURCES += \
@@ -49,7 +51,8 @@ SOURCES += \
     datamodel/GrantFundingTreeModel.cpp \
     datamodel/TeachingTreeModel.cpp \
     database/TestCSVReader.cpp \
-    gui/qcustomplot.cpp
+    gui/qcustomplot.cpp \
+    tests/TestQString.cpp
 
 FORMS += \
     gui/customsort.ui \
