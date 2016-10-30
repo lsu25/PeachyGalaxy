@@ -435,15 +435,41 @@ int MainWindow::checkFile(int index, QString filePath) {
 
 void MainWindow::createDefaultSortOrder(int tabIndex) {
     QStringList defaultOrder;
+    QStringList tOrder1 , tOrder2;
+    QStringList pOrder1 , pOrder2 , pOrder3 , pOrder4;
+    QStringList prOrder1 , prOrder2 , prOrder3 , prOrder4;
+    QStringList gOrder1 , gOrder2 , gOrder3;
+
     defaultOrder << "Default";
+    tOrder1 << "Program";
+    tOrder2 << "Start Date";
+    pOrder1 << "Type";
+    pOrder2 << "StatusDate";
+    pOrder3 << "Role";
+    pOrder4 << "Title";
+    prOrder1 << "Date";
+    prOrder2 << "Type";
+    prOrder3 << "Role";
+    prOrder4 << "Title";
+    gOrder1 << "Type";
+    gOrder2 << "Status";
+    gOrder3 << "PeerReviewed";
+
 
     switch (tabIndex) {
     case FUNDING:
         // specify default sort order
+        //GRANTS_MANFIELDS = {"Member Name", "Funding Type", "Status", "Peer Reviewed?", "Role", "Title", "Start Date"};
         defaultOrder << "Member Name" << "Funding Type" << "Peer Reviewed?" << "Status" << "Role" << "Title";
+        gOrder1 << "Funding Type"  << "Member Name" << "Peer Reviewed?" << "Status" << "Role" << "Title";
+        gOrder2 << "Status" << "Member Name" << "Funding Type" << "Peer Reviewed?" << "Role" << "Title";
+        gOrder3 << "Peer Reviewed?" << "Member Name" << "Funding Type" << "Status" << "Role" << "Title" ;
 
         // add default list to member variable
         allFundOrders << defaultOrder;
+        allFundOrders << gOrder1;
+        allFundOrders << gOrder2;
+        allFundOrders << gOrder3;
 
     {
         // save the default for the user
@@ -454,10 +480,19 @@ void MainWindow::createDefaultSortOrder(int tabIndex) {
         break;
     case PRESENTATIONS:
         // specify default sort order
+        //PRES_MANFIELDS = {"Member Name", "Date", "Type", "Role", "Title"};
         defaultOrder << "Member Name" << "Type" << "Role" << "Title";
+        prOrder1 << "Member Name" << "Date" << "Type" << "Role" << "Title";
+        prOrder2 << "Type" << "Member Name" << "Date" << "Role" << "Title";
+        prOrder3 << "Role" << "Member Name" << "Date" << "Type" << "Title";
+        prOrder4 << "Title" << "Member Name" << "Date" << "Type" << "Role";
 
         // add default list to member variable
         allPresOrders << defaultOrder;
+        allPresOrders << prOrder1 ;
+        allPresOrders << prOrder2 ;
+        allPresOrders << prOrder3 ;
+        allPresOrders << prOrder4 ;
 
     {
         // save the default for the user
@@ -469,9 +504,17 @@ void MainWindow::createDefaultSortOrder(int tabIndex) {
     case PUBLICATIONS:
         // specify default sort order
         defaultOrder << "Member Name" << "Type" << "Role" << "Title";
+        pOrder1 << "Type" << "Member Name" << "Role" << "Title";
+        pOrder2 << "Member Name" << "Status Date"  << "Type" << "Role" << "Title";
+        pOrder3 << "Role" << "Member Name" << "Status Date"  << "Type" << "Title";
+        pOrder4 << "Title" << "Member Name" << "Status Date"  << "Type" << "Role";
 
         // add default list to member variable
         allPubOrders << defaultOrder;
+        allPubOrders << pOrder1;
+        allPubOrders << pOrder2;
+        allPubOrders << pOrder3;
+        allPubOrders << pOrder4;
 
     {
         // save the default for the user
@@ -479,24 +522,27 @@ void MainWindow::createDefaultSortOrder(int tabIndex) {
         savePubSort.saveList(allPubOrders);
     }
 
+
         break;
     case TEACH:
         // specify default sort order
         defaultOrder << "Member Name" << "Program";
+        tOrder1 << "Program" << "Member Name" << "Start Date";
+        tOrder2 << "Member Name" << "Start Date" << "Program";
 
-        // add default list to member variable
+        //add default list to member variable
         allTeachOrders << defaultOrder;
+        allTeachOrders << tOrder1;
+        allTeachOrders << tOrder2;
 
     {
         // save the default for the user
         QSortListIO saveTeachSort(FUNDORDER_SAVE);
         saveTeachSort.saveList(allFundOrders);
     }
-
         break;
     }
 }
-
 /*
  * err: vector of pointers to record entries.
  * headers: vector of strings containing the db headers
@@ -860,72 +906,128 @@ void MainWindow::on_fund_sort_currentIndexChanged(int index) {
     }
 }
 
+//Teaching Sort Delete
 void MainWindow::on_teach_delete_sort_clicked() {
     if (ui->teach_sort->currentIndex()!=0) {
-        QMessageBox prompt;
-        prompt.setText("Are you sure you want to delete " + ui->teach_sort->currentText() + "?");
-        prompt.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        if (ui->teach_sort->currentIndex()!=1){
+            if (ui->teach_sort->currentIndex()!=2){
+                QMessageBox prompt;
+                prompt.setText("Are you sure you want to delete " + ui->teach_sort->currentText() + "?");
+                prompt.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 
-        if (prompt.exec()==QMessageBox::Yes) {
-            allTeachOrders.removeAt(ui->teach_sort->currentIndex());
-            ui->teach_sort->removeItem(ui->teach_sort->currentIndex());
+                if (prompt.exec()==QMessageBox::Yes) {
+                    allTeachOrders.removeAt(ui->teach_sort->currentIndex());
+                    ui->teach_sort->removeItem(ui->teach_sort->currentIndex());
 
-            QSortListIO saveTeachSort(TEACHORDER_SAVE);
-            saveTeachSort.saveList(allTeachOrders);
+                    QSortListIO saveTeachSort(TEACHORDER_SAVE);
+                    saveTeachSort.saveList(allTeachOrders);
+                }
+            }else{
+                QMessageBox::critical(this, "", "Cannot delete Start Date");
+            }
+        }else{
+            QMessageBox::critical(this, "", "Cannot delete Program");
         }
     } else {
         QMessageBox::critical(this, "", "Cannot delete Default");
     }
 }
 
+//Publication Sort Delete
 void MainWindow::on_pub_delete_sort_clicked() {
     if (ui->pub_sort->currentIndex()!=0) {
-        QMessageBox prompt;
-        prompt.setText("Are you sure you want to delete " + ui->pub_sort->currentText() + "?");
-        prompt.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        if (ui->pub_sort->currentIndex()!=1) {
+            if(ui->pub_sort->currentIndex()!=2) {
+                if(ui->pub_sort->currentIndex()!=3) {
+                    if(ui->pub_sort->currentIndex()!=4) {
+                        QMessageBox prompt;
+                        prompt.setText("Are you sure you want to delete " + ui->pub_sort->currentText() + "?");
+                        prompt.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 
-        if (prompt.exec()==QMessageBox::Yes) {
-            allPubOrders.removeAt(ui->pub_sort->currentIndex());
-            ui->pub_sort->removeItem(ui->pub_sort->currentIndex());
+                        if (prompt.exec()==QMessageBox::Yes) {
+                            allPubOrders.removeAt(ui->pub_sort->currentIndex());
+                            ui->pub_sort->removeItem(ui->pub_sort->currentIndex());
 
-            QSortListIO savePubSort(PUBORDER_SAVE);
-            savePubSort.saveList(allPubOrders);
-        }
+                            QSortListIO savePubSort(PUBORDER_SAVE);
+                            savePubSort.saveList(allPubOrders);
+                        }
+                    } else {
+                       QMessageBox::critical(this, "", "Cannot delete Title");
+                    }
+                } else {
+                   QMessageBox::critical(this, "", "Cannot delete Role");
+                }
+             } else {
+                QMessageBox::critical(this, "", "Cannot delete Status Date");
+             }
+         } else {
+            QMessageBox::critical(this, "", "Cannot delete Type");
+         }
     } else {
         QMessageBox::critical(this, "", "Cannot delete Default");
     }
 }
 
+//Presentations Sort Delete
 void MainWindow::on_pres_delete_sort_clicked() {
     if (ui->pres_sort->currentIndex()!=0) {
-        QMessageBox prompt;
-        prompt.setText("Are you sure you want to delete " + ui->pres_sort->currentText() + "?");
-        prompt.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        if (ui->pres_sort->currentIndex()!=1) {
+            if (ui->pres_sort->currentIndex()!=2) {
+                if (ui->pres_sort->currentIndex()!=3) {
+                    if (ui->pres_sort->currentIndex()!=4) {
+                        QMessageBox prompt;
+                        prompt.setText("Are you sure you want to delete " + ui->pres_sort->currentText() + "?");
+                        prompt.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 
-        if (prompt.exec()==QMessageBox::Yes) {
-            allPresOrders.removeAt(ui->pres_sort->currentIndex());
-            ui->pres_sort->removeItem(ui->pres_sort->currentIndex());
+                        if (prompt.exec()==QMessageBox::Yes) {
+                            allPresOrders.removeAt(ui->pres_sort->currentIndex());
+                            ui->pres_sort->removeItem(ui->pres_sort->currentIndex());
 
-            QSortListIO savePresSort(PRESORDER_SAVE);
-            savePresSort.saveList(allPresOrders);
+                            QSortListIO savePresSort(PRESORDER_SAVE);
+                            savePresSort.saveList(allPresOrders);
+                        }
+                    } else {
+                        QMessageBox::critical(this, "", "Cannot delete Title");
+                    }
+                } else {
+                    QMessageBox::critical(this, "", "Cannot delete Role");
+                }
+            } else {
+                QMessageBox::critical(this, "", "Cannot delete Type");
+            }
+        } else {
+            QMessageBox::critical(this, "", "Cannot delete Date");
         }
     } else {
         QMessageBox::critical(this, "", "Cannot delete Default");
     }
 }
 
+//Grants and Clinical Funding Sort Delete
 void MainWindow::on_fund_delete_sort_clicked() {
     if (ui->fund_sort->currentIndex()!=0) {
-        QMessageBox prompt;
-        prompt.setText("Are you sure you want to delete " + ui->fund_sort->currentText() + "?");
-        prompt.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        if (ui->fund_sort->currentIndex()!=1) {
+            if (ui->fund_sort->currentIndex()!=2) {
+                if (ui->fund_sort->currentIndex()!=3) {
+                    QMessageBox prompt;
+                    prompt.setText("Are you sure you want to delete " + ui->fund_sort->currentText() + "?");
+                    prompt.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 
-        if (prompt.exec()==QMessageBox::Yes) {
-            allFundOrders.removeAt(ui->fund_sort->currentIndex());
-            ui->fund_sort->removeItem(ui->fund_sort->currentIndex());
+                    if (prompt.exec()==QMessageBox::Yes) {
+                        allFundOrders.removeAt(ui->fund_sort->currentIndex());
+                        ui->fund_sort->removeItem(ui->fund_sort->currentIndex());
 
-            QSortListIO saveFundSort(FUNDORDER_SAVE);
-            saveFundSort.saveList(allFundOrders);
+                        QSortListIO saveFundSort(FUNDORDER_SAVE);
+                        saveFundSort.saveList(allFundOrders);
+                    }
+                } else {
+                    QMessageBox::critical(this, "", "Cannot delete Peer Reviewed");
+                }
+            } else {
+                QMessageBox::critical(this, "", "Cannot delete Status");
+            }
+        } else {
+            QMessageBox::critical(this, "", "Cannot delete Type");
         }
     } else {
         QMessageBox::critical(this, "", "Cannot delete Default");
@@ -948,6 +1050,7 @@ void MainWindow::on_teach_load_file_clicked() {
     }
 }
 
+//Teaching Sort Load
 bool MainWindow::load_teach(QString path, bool multi_file) {
     if (!checkFile(TEACH, path)) {
         // enable gui elements
@@ -975,6 +1078,8 @@ bool MainWindow::load_teach(QString path, bool multi_file) {
         if (ui->teach_sort->currentIndex() < 0) {
             createDefaultSortOrder(TEACH);
             ui->teach_sort->addItem(allTeachOrders[0][0]);
+            ui->teach_sort->addItem(allTeachOrders[1][0]);
+            ui->teach_sort->addItem(allTeachOrders[2][0]);
         }
 
         // create the tree
@@ -999,6 +1104,7 @@ void MainWindow::on_pub_load_file_clicked() {
     }
 }
 
+//Publications Sort Load
 bool MainWindow::load_pub(QString path, bool multi_file) {
     if (!checkFile(PUBLICATIONS, path)) {
         // enable gui elements
@@ -1026,6 +1132,10 @@ bool MainWindow::load_pub(QString path, bool multi_file) {
         if (ui->pub_sort->currentIndex() < 0) {
             createDefaultSortOrder(PUBLICATIONS);
             ui->pub_sort->addItem(allPubOrders[0][0]);
+            ui->pub_sort->addItem(allPubOrders[1][0]);
+            ui->pub_sort->addItem(allPubOrders[2][0]);
+            ui->pub_sort->addItem(allPubOrders[3][0]);
+            ui->pub_sort->addItem(allPubOrders[4][0]);
         }
 
         // create the tree
@@ -1050,6 +1160,7 @@ void MainWindow::on_pres_load_file_clicked() {
     }
 }
 
+//Presentations Sort Load
 bool MainWindow::load_pres(QString path, bool multi_file) {
     if (!checkFile(PRESENTATIONS, path)) {
         // enable gui elements
@@ -1077,6 +1188,10 @@ bool MainWindow::load_pres(QString path, bool multi_file) {
         if (ui->pres_sort->currentIndex() < 0) {
             createDefaultSortOrder(PRESENTATIONS);
             ui->pres_sort->addItem(allPresOrders[0][0]);
+            ui->pres_sort->addItem(allPresOrders[1][0]);
+            ui->pres_sort->addItem(allPresOrders[2][0]);
+            ui->pres_sort->addItem(allPresOrders[3][0]);
+            ui->pres_sort->addItem(allPresOrders[4][0]);
         }
 
         // create the tree
@@ -1101,6 +1216,7 @@ void MainWindow::on_fund_load_file_clicked() {
     }
 }
 
+//Grants and Clenical Funding Sort Load
 bool MainWindow::load_fund(QString path, bool multi_file) {
     if (!checkFile(FUNDING, path)) {
         // enable gui elements
@@ -1128,6 +1244,9 @@ bool MainWindow::load_fund(QString path, bool multi_file) {
         if (ui->fund_sort->currentIndex() < 0) {
             createDefaultSortOrder(FUNDING);
             ui->fund_sort->addItem(allFundOrders[0][0]);
+            ui->fund_sort->addItem(allFundOrders[1][0]);
+            ui->fund_sort->addItem(allFundOrders[2][0]);
+            ui->fund_sort->addItem(allFundOrders[3][0]);
         }
 
         // create the tree
