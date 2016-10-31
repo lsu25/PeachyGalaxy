@@ -32,7 +32,8 @@ HEADERS += \
     datamodel/TeachingTreeModel.h \
     database/TestCSVReader.h \
     gui/qcustomplot.h \
-    tests/TestQString.h
+    tests/TestQString.h \
+    tests/TestSuite.h
 
 
 SOURCES += \
@@ -52,7 +53,8 @@ SOURCES += \
     datamodel/TeachingTreeModel.cpp \
     database/TestCSVReader.cpp \
     gui/qcustomplot.cpp \
-    tests/TestQString.cpp
+    tests/TestQString.cpp \
+    tests/TestSuite.cpp
 
 FORMS += \
     gui/customsort.ui \
