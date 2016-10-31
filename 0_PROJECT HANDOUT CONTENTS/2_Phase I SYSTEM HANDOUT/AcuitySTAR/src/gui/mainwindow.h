@@ -101,6 +101,22 @@ private slots:
 
     void on_pubExportButton_clicked();
 
+    void on_fund_line_button_toggled();
+
+    void on_pres_line_button_toggled();
+
+    void on_pub_line_button_toggled();
+
+    void on_teach_line_button_toggled();
+
+    void on_fund_scatter_button_toggled();
+
+    void on_pub_scatter_button_toggled();
+
+    void on_pres_scatter_button_toggled();
+
+    void on_teach_scatter_button_toggled();
+
 private:
     static std::vector<std::string> GRANTS_MANFIELDS, PRES_MANFIELDS, PUBS_MANFIELDS, TEACH_MANFIELDS;
 
@@ -140,6 +156,8 @@ private:
 
     void setupPieChart(PieChartWidget *pieChart, QListWidget *pieListWidget, std::vector<std::pair<std::string, double> > pieChartList);
     void setupBarChart(QCustomPlot *barChart, std::vector<std::pair<std::string, double> > barChartList);
+    void setupLineChart(QCustomPlot *lineChart, std::vector<std::pair <std::string, double>> lineChartList);
+    void setupScatterChart(QCustomPlot *scatterChart, std::vector<std::pair <std::string, double>> scatterChartList);
 
     bool handle_field_errors(std::vector<std::vector<std::string>*>& errors,
                              std::vector<std::string>& headers,
