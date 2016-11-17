@@ -67,15 +67,19 @@ void CustomSort::on_buttonBox_accepted() {
     if (ui->sort_name->text()!="") {
         if (fieldBoxes.at(0)->currentText()!="") {
             if (!fieldBoxes.at(0)->currentText().contains("Date")) {
-                sortFields << ui->sort_name->displayText();
+                if (!fieldBoxes.at(3)->currentText().contains("Division")) {
+                    sortFields << ui->sort_name->displayText();
 
-                for (int i=0; i<numFields; i++) {
-                    QString currentText = fieldBoxes.at(i)->currentText();
-                    if (currentText!="") {
-                        sortFields << currentText;
+                    for (int i=0; i<numFields; i++) {
+                        QString currentText = fieldBoxes.at(i)->currentText();
+                        if (currentText!="") {
+                         sortFields << currentText;
+                        }
                     }
+                    done(1);
+                }else {
+                    QMessageBox::critical(this, "", "Sorry, cannot sort by division last.");
                 }
-                done(1);
             } else {
                 QMessageBox::critical(this, "", "Sorry, cannot sort by date first.");
             }
