@@ -53,11 +53,15 @@ void CSVReader::loadCSV(std::string file_name) {
 			if( !setHeaders ) {
 				setHeaders = true;
 				headers = line;
-			} else {
+			} 
+		        if (line.size() != headers.size()){
+            			line.push_back("");
+            		}
+		        else {
 				all_data.push_back( line );
             }
             pos++;
-		}
+	}
     }
 }
 
