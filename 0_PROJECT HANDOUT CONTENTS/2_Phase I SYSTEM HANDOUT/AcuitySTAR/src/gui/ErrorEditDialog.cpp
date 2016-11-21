@@ -9,6 +9,9 @@
 #include <QAbstractButton>
 #include <QMessageBox>
 
+std::vector<std::vector<int>> errorLocationList;
+int locationNum;
+
 /*
  * Load data contained in the errors vector into a QWidgetTable
  * Fields will be marked red and editable if they are a mandatory field
@@ -29,6 +32,7 @@ ErrorEditDialog::ErrorEditDialog(QWidget *parent,
     ui(new Ui::ErrorEditDialog)
 {
     ui->setupUi(this);
+    locationNum = 0;
     ui->tableWidget->setRowCount((int) errors.size());
     ui->tableWidget->setColumnCount((int) headers.size());
 
@@ -45,14 +49,15 @@ ErrorEditDialog::ErrorEditDialog(QWidget *parent,
     for (it = errors.begin(); it != errors.end(); it++) {
         for (int col = 0; col < (int) headers.size() && col < (int) (*it)->size(); col++) {
             item = new QTableWidgetItem();
-            Qt::ItemFlags flag = item->flags();
-            item->setFlags(Qt::ItemIsSelectable);
             item->setText((*it)->at(col).c_str());
             for (int i = 0; i < (int) mandatory.size(); i++) {
                 if (mandatory[i].compare(headers.at(col)) == 0
                         && (*it)->at(col).compare("") == 0) {
+                    std::vector<int> location;
+                    location.push_back(row);
+                    location.push_back(col);
+                    errorLocationList.push_back(location);
                     item->setBackground(brush);
-                    item->setFlags(flag);
                 }
             }
             ui->tableWidget->setItem(row, col, item);
@@ -109,4 +114,25 @@ void ErrorEditDialog::on_save_clicked()
 void ErrorEditDialog::on_cancel_clicked()
 {
     reject();
+}
+
+void ErrorEditDialog::on_nextButton_clicked()
+{
+    std::vector<int> location = errorLocationList.at(locationNum);
+    ui->tableWidget->setCurrentCell(location.at(0), location.at(1));
+    locationNum++;
+    if(locationNum>=errorLocationList.size()){
+        locationNum = 0;
+    }
+}
+
+
+void ErrorEditDialog::on_prevButton_clicked()
+{
+    std::vector<int> location = errorLocationList.at(locationNum);
+    ui->tableWidget->setCurrentCell(location.at(0), location.at(1));
+    locationNum--;
+    if(locationNum<0){
+        locationNum = errorLocationList.size() - 1;
+    }
 }
