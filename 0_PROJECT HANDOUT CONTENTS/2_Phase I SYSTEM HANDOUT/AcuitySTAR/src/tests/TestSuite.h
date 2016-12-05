@@ -12,6 +12,8 @@ private slots:
     void testRecordsManagerHeaderCount();
     void testRecordsManagerFindRecord();
     void testRecordsManagerAddRecord();
+    void testQCPScatterConstructors();
+    void testDivisionsHeader();
 };
 
 #endif // TESTCSVREADER_H

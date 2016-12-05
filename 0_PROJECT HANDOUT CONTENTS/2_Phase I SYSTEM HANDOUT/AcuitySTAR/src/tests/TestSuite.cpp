@@ -4,6 +4,7 @@
 #include <./gui/mainwindow.h>
 #include <./database/RecordsManager.h>
 #include <./gui/ErrorEditDialog.h>
+#include <./gui/qcustomplot.h>
 #include <QMessageBox>
 #include <QPrintDialog>
 #include <iostream>
@@ -147,4 +148,37 @@ void TestSuite:: testRecordsManagerAddRecord() {
     foundRecord = recordsManager.findRecord(4);
 
     QVERIFY(foundRecord.empty() == false);
+}
+
+void TestSuite:: testQCPScatterConstructors()
+{
+    //tests mPen in QCPScatterStyle to see if it is not defined
+    QCPScatterStyle scattConstruct1;
+    bool result = scattConstruct1.isPenDefined();
+    QVERIFY(result == false);
+    //checks if the Qpixmap constructor for QCPScatterStyle is defined
+    QPixmap pixmap;
+    QCPScatterStyle scattConstruct7(pixmap);
+    bool result7 = scattConstruct7.isPenDefined();
+    QVERIFY(result7 == true);
+}
+void TestSuite:: testDivisionsHeader()
+{
+    CSVReader readerOne("./New_Sample_Data/New_Program_Teaching_expanded.csv");
+    QVERIFY(readerOne.getHeaders().size() == 19);
+
+    CSVReader readerTwo("./New_Sample_Data/New_Presentations_expanded.csv");
+    QVERIFY(readerTwo.getHeaders().size() == 17);
+
+    CSVReader readerThree("./New_Sample_Data/New_Grants_expanded.csv");
+    QVERIFY(readerThree.getHeaders().size() == 19);
+
+    CSVReader readerFour("./New_Sample_Data/Publications_expanded.csv");
+    QVERIFY(readerFour.getHeaders().size() == 17);
+
+    CSVReader readerFive("NO FILE");
+    QVERIFY(readerFive.getHeaders().empty() == true);
+
+    CSVReader myReader("./Sample Data/TestInput.csv");
+    QVERIFY(myReader.getHeaders().size() == 4);
 }

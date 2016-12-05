@@ -1,0 +1,6 @@
+*Test QCPScatterStyle constructors with isPenDefined() to see if it will return false. 
+*Test if isPenDefined is true for (\ref QCPGraph::setPen)
+*Test if QCPScatterStyle can be transformed to QCPScatterShape
+*Test the ordering of the layers of QCustomPlot
+*Test QCustomPlot::moveLayer and find out if the order of the Layers change
+*Test when a layer is deleted, if the objects on the layer are also deleted with QCustomPlot::removeLayer()

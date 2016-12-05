@@ -23,6 +23,9 @@ void CustomSort::setFields(const std::vector<std::string> &headers) {
     fieldBoxes << ui->field_4;
     fieldBoxes << ui->field_5;
     fieldBoxes << ui->field_6;
+    fieldBoxes << ui->field_7;
+
+
 
     // hide unnessary field boxes
     for (int i = numFields; i < fieldBoxes.size(); i++) {
