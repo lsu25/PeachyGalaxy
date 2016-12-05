@@ -11,7 +11,7 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-    int test = 1;   /* test off */
+    int test = 0;   /* test off */
 
     if (test) {
         TestQString *test_obj = new TestQString();

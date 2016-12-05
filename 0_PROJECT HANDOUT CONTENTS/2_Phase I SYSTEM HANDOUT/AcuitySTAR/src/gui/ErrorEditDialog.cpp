@@ -11,6 +11,7 @@
 
 std::vector<std::vector<int>> errorLocationList;
 int locationNum;
+int errorNum;
 
 /*
  * Load data contained in the errors vector into a QWidgetTable
@@ -64,6 +65,9 @@ ErrorEditDialog::ErrorEditDialog(QWidget *parent,
         }
         row++;
     }
+    errorNum = errorLocationList.size();
+    modify_errorLabel();
+    connect(ui->tableWidget,SIGNAL(cellChanged(int,int)),this,SLOT(modify_cell(int,int)),Qt::UniqueConnection);
 }
 
 //Clean up allocated memory for the table items
@@ -118,21 +122,52 @@ void ErrorEditDialog::on_cancel_clicked()
 
 void ErrorEditDialog::on_nextButton_clicked()
 {
-    std::vector<int> location = errorLocationList.at(locationNum);
-    ui->tableWidget->setCurrentCell(location.at(0), location.at(1));
     locationNum++;
     if(locationNum>=errorLocationList.size()){
         locationNum = 0;
     }
+    std::vector<int> location = errorLocationList.at(locationNum);
+    ui->tableWidget->setCurrentCell(location.at(0), location.at(1));
+    ui->tableWidget->setFocus();
 }
 
 
 void ErrorEditDialog::on_prevButton_clicked()
 {
-    std::vector<int> location = errorLocationList.at(locationNum);
-    ui->tableWidget->setCurrentCell(location.at(0), location.at(1));
     locationNum--;
     if(locationNum<0){
         locationNum = errorLocationList.size() - 1;
     }
+    std::vector<int> location = errorLocationList.at(locationNum);
+    ui->tableWidget->setCurrentCell(location.at(0), location.at(1));
+    ui->tableWidget->setFocus();
+}
+
+void ErrorEditDialog::modify_cell(int row, int col)
+{
+    QBrush brush(QColor(0, 0, 0, 0));
+    std::vector<int> modifiedCell;
+    modifiedCell.push_back(row);
+    modifiedCell.push_back(col);
+    int findCell = std::find(errorLocationList.begin(),errorLocationList.end(),modifiedCell) - errorLocationList.begin();
+    if(findCell < errorLocationList.size()){
+        errorLocationList.erase(errorLocationList.begin() + findCell);
+        errorNum--;
+        locationNum--;
+        if(locationNum<0){
+            locationNum = errorLocationList.size() - 1;
+        }
+        if(errorNum==0){
+            ui->nextButton->setEnabled(false);
+            ui->prevButton->setEnabled(false);
+        }
+        ui->tableWidget->item(row, col)->setBackground(brush);
+        modify_errorLabel();
+    }
+
+}
+
+void ErrorEditDialog::modify_errorLabel()
+{
+    ui->errorLabel->setText(QString::number(errorNum));
 }

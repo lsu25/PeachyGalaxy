@@ -18,14 +18,21 @@
     <normaloff>:/icon32.ico</normaloff>:/icon32.ico</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="6">
+   <item row="2" column="8">
     <widget class="QPushButton" name="cancel">
      <property name="text">
       <string>Cancel</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="5">
+   <item row="2" column="1">
+    <widget class="QPushButton" name="nextButton">
+     <property name="text">
+      <string>Next</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="7">
     <widget class="QPushButton" name="save">
      <property name="maximumSize">
       <size>
@@ -45,7 +52,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="2">
+   <item row="2" column="4">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -58,15 +65,25 @@
      </property>
     </spacer>
    </item>
-   <item row="2" column="1">
-    <widget class="QPushButton" name="nextButton">
+   <item row="0" column="0" colspan="10">
+    <widget class="QTableWidget" name="tableWidget"/>
+   </item>
+   <item row="2" column="2">
+    <widget class="QLabel" name="label">
      <property name="text">
-      <string>Next</string>
+      <string>Errors:</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="0" colspan="8">
-    <widget class="QTableWidget" name="tableWidget"/>
+   <item row="2" column="3">
+    <widget class="QLabel" name="errorLabel">
+     <property name="midLineWidth">
+      <number>7</number>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
