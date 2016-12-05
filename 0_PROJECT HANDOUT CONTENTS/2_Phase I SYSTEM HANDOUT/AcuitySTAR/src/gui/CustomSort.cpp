@@ -25,8 +25,6 @@ void CustomSort::setFields(const std::vector<std::string> &headers) {
     fieldBoxes << ui->field_6;
     fieldBoxes << ui->field_7;
 
-
-
     // hide unnessary field boxes
     for (int i = numFields; i < fieldBoxes.size(); i++) {
         fieldBoxes[i]->setHidden(true);
@@ -59,6 +57,8 @@ void CustomSort::on_field_2_currentIndexChanged(int index) { setNext(2, index);}
 void CustomSort::on_field_3_currentIndexChanged(int index) { setNext(3, index);}
 void CustomSort::on_field_4_currentIndexChanged(int index) { setNext(4, index);}
 void CustomSort::on_field_5_currentIndexChanged(int index) { setNext(5, index);}
+void CustomSort::on_field_6_currentIndexChanged(int index) { setNext(6, index);}
+
 
 void CustomSort::on_buttonBox_rejected() {
     done(0);
