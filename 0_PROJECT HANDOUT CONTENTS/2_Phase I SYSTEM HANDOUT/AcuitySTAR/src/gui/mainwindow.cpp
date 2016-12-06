@@ -29,6 +29,7 @@
 #define PUBORDER_SAVE   "pubsortorder.dat"
 #define TEACHORDER_SAVE "teachsortorder.dat"
 
+
 std::vector<std::string> MainWindow::GRANTS_MANFIELDS = {"Member Name", "Funding Type", "Status", "Peer Reviewed?", "Role", "Title", "Start Date","Division"};
 std::vector<std::string> MainWindow::PRES_MANFIELDS = {"Member Name", "Date", "Type", "Role", "Title","Division"};
 std::vector<std::string> MainWindow::PUBS_MANFIELDS = {"Member Name", "Type", "Status Date", "Role", "Title","Division"};
@@ -87,7 +88,41 @@ MainWindow::MainWindow(QWidget *parent) :
 
     dateChanged = {false, false, false, false};
 
+    QMessageBox::StandardButton restart0 = (QMessageBox::question(this, "Aquarius", tr("Do you want to start from where you left off?"), QMessageBox::Yes | QMessageBox::No));
+    if (restart0 == QMessageBox::Yes)
+    {
+            std::string filelist[4] = {"teachSaveFile.csv", "presentationSaveFile.csv", "publicationSaveFile.csv", "fundSaveFile.csv"};
+            for (int i=0; i<4; i++)
+            {
+                std::ifstream infile(filelist[i]);
+                if(!infile.is_open())
+                {
+                    std::ofstream outfile(filelist[i]);
+                    outfile.close();
+                }
+                else
+                {
+                    if (i==0)
+                    {
+                        load_teach(filelist[i].c_str(), true);
+                    }
+                    else if (i==1)
+                    {
+                        load_pres(filelist[i].c_str(), true);
+                    }
+                    else if (i==2)
+                    {
+                        load_pub(filelist[i].c_str(), true);
+                    }
+                    else
+                    {
+                        load_fund(filelist[i].c_str(), true);
+                    }
+                }
+            }
+    }
 }
+
 
 MainWindow::~MainWindow() {
     delete ui;
@@ -241,6 +276,7 @@ int MainWindow::checkFile(int index, QString filePath) {
                         }
                     }
                 }
+                saveTeach();
             } else {
                 return EXIT_FAILURE;
             }
@@ -298,6 +334,7 @@ int MainWindow::checkFile(int index, QString filePath) {
                         }
                     }
                 }
+                   savePublication();
             } else {
                 return EXIT_FAILURE;
             }
@@ -356,6 +393,7 @@ int MainWindow::checkFile(int index, QString filePath) {
                         }
                     }
                 }
+                savePresentation();
             } else {
                 return EXIT_FAILURE;
             }
@@ -420,6 +458,7 @@ int MainWindow::checkFile(int index, QString filePath) {
                         }
                     }
                 }
+                saveFund();
             } else {
                 return EXIT_FAILURE;
             }
@@ -431,6 +470,150 @@ int MainWindow::checkFile(int index, QString filePath) {
         break;
     }
     return EXIT_SUCCESS;
+}
+
+void MainWindow:: saveTeach()
+{
+    std:: ofstream fileout;
+    fileout.open("teachSaveFile.csv");
+    Manager newManager;
+
+    BasicRecord newHeaders = teachdb->getHeaders();
+    for (BasicRecord::iterator iter = newHeaders.begin(); iter !=newHeaders.end(); ++iter)
+    {
+        if (iter==newHeaders.end()-1)
+        {
+            fileout << '"' << *iter << '"' << "\n";
+        }
+        else
+        {
+            fileout << '"' << *iter << '"' << ",";
+        }
+    }
+    newManager = teachdb->getManager();
+    for (Manager::iterator iter = newManager.begin(); iter != newManager.end(); ++iter)
+    {
+        for (BasicRecord::iterator iter2 = iter->second->begin(); iter2 != iter->second->end(); ++iter2)
+        {
+            if (iter2==iter->second->end()-1)
+            {
+                fileout << '"' << *iter2 << '"' << "\n";
+            }
+            else
+            {
+                fileout << '"' << *iter2 << '"' << ",";
+            }
+        }
+    }
+    fileout.close();
+}
+
+void MainWindow:: savePresentation()
+{
+    std:: ofstream fileout;
+    fileout.open("presentationSaveFile.csv");
+    Manager newManager;
+
+    BasicRecord newHeaders = presdb->getHeaders();
+    for (BasicRecord::iterator iter = newHeaders.begin(); iter !=newHeaders.end(); ++iter)
+    {
+        if (iter==newHeaders.end()-1)
+        {
+            fileout << '"' << *iter << '"' << "\n";
+        }
+        else
+        {
+            fileout << '"' << *iter << '"' << ",";
+        }
+    }
+    newManager = presdb->getManager();
+    for (Manager::iterator iter = newManager.begin(); iter != newManager.end(); ++iter)
+    {
+        for (BasicRecord::iterator iter2 = iter->second->begin(); iter2 != iter->second->end(); ++iter2)
+        {
+            if (iter2==iter->second->end()-1)
+            {
+                fileout << '"' << *iter2 << '"' << "\n";
+            }
+            else
+            {
+                fileout << '"' << *iter2 << '"' << ",";
+            }
+        }
+    }
+    fileout.close();
+}
+
+void MainWindow:: savePublication()
+{
+    std:: ofstream fileout;
+    fileout.open("publicationSaveFile.csv");
+    Manager newManager;
+
+    BasicRecord newHeaders = pubdb->getHeaders();
+    for (BasicRecord::iterator iter = newHeaders.begin(); iter !=newHeaders.end(); ++iter)
+    {
+        if (iter==newHeaders.end()-1)
+        {
+            fileout << '"' << *iter << '"' << "\n";
+        }
+        else
+        {
+            fileout << '"' << *iter << '"' << ",";
+        }
+    }
+    newManager = pubdb->getManager();
+    for (Manager::iterator iter = newManager.begin(); iter != newManager.end(); ++iter)
+    {
+        for (BasicRecord::iterator iter2 = iter->second->begin(); iter2 != iter->second->end(); ++iter2)
+        {
+            if (iter2==iter->second->end()-1)
+            {
+                fileout << '"' << *iter2 << '"' << "\n";
+            }
+            else
+            {
+                fileout << '"' << *iter2 << '"' << ",";
+            }
+        }
+    }
+    fileout.close();
+}
+
+void MainWindow:: saveFund()
+{
+    std:: ofstream fileout;
+    fileout.open("fundSaveFile.csv");
+    Manager newManager;
+
+    BasicRecord newHeaders = funddb->getHeaders();
+    for (BasicRecord::iterator iter = newHeaders.begin(); iter !=newHeaders.end(); ++iter)
+    {
+        if (iter==newHeaders.end()-1)
+        {
+            fileout << '"' << *iter << '"' << "\n";
+        }
+        else
+        {
+            fileout << '"' << *iter << '"' << ",";
+        }
+    }
+    newManager = funddb->getManager();
+    for (Manager::iterator iter = newManager.begin(); iter != newManager.end(); ++iter)
+    {
+        for (BasicRecord::iterator iter2 = iter->second->begin(); iter2 != iter->second->end(); ++iter2)
+        {
+            if (iter2==iter->second->end()-1)
+            {
+                fileout << '"' << *iter2 << '"' << "\n";
+            }
+            else
+            {
+                fileout << '"' << *iter2 << '"' << ",";
+            }
+        }
+    }
+    fileout.close();
 }
 
 void MainWindow::createDefaultSortOrder(int tabIndex) {

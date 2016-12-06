@@ -4,6 +4,7 @@
 #include <string>
 #include <QMainWindow>
 #include <vector>
+#include <fstream>
 
 
 class RecordsManager;
@@ -33,6 +34,10 @@ public:
 private slots:
     QString load_file();
 
+    void saveTeach();
+    void savePresentation();
+    void savePublication();
+    void saveFund();
     void on_pres_load_file_clicked();
     void on_pub_load_file_clicked();
     void on_fund_load_file_clicked();

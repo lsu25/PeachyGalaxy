@@ -30,6 +30,13 @@ RecordsManager::~RecordsManager() {
 }
 
 /**
+ * Gets the Manager.
+ */
+Manager RecordsManager::getManager() {
+    return manager;
+}
+
+/**
  * Adds a new record to the manager.
  *
  * @param key       the record's key

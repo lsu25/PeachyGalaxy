@@ -27,6 +27,7 @@ public:
     RecordsManager(BasicRecord* _headers);
     ~RecordsManager();
 
+    Manager getManager();
     void addRecord(int key, BasicRecord* record);
     std::vector<BasicRecord*> findRecord(int year);
     std::vector<BasicRecord*> findRecordsInRange(int startYear, int endYear);
